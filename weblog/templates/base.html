@@ -1,0 +1,36 @@
+{% load static %}
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Revue Littéraire{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap" rel="stylesheet">
+</head>
+<body class="literata-300">
+    {% if user.is_authenticated %}
+        {% include 'blog/partials/header_connected.html' %}
+    {% else %}
+        {% include 'authentication/partials/header.html' %}
+    {% endif %}
+    {% block flux %}
+    {% endblock flux %}
+    {% block posts %}
+    {% endblock posts %}
+    {% block socials %}
+    {% endblock socials %}
+    {% block login %}
+    {% endblock login %}
+    {% block signup %}
+    {% endblock signup %}
+    {% block content %}
+    {% endblock content %}
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

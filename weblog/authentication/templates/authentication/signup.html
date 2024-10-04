@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block signup %}
+    <main class="front">
+        <div class="container text-center align-items-center justify-content-center p-4">
+            <h2 class="text-center p-4">Inscrivez-vous</h2>
+            <form method="post" id="signup-form">
+                {% csrf_token %}
+                {% bootstrap_form form %} 
+                <p class="gap-5">
+                    <a class="btn btn-primary m-5" href="{% url 'authentication:login' %}">Retourner</a>
+                    <button type="submit" class="btn btn-primary m-5">S'inscrire</button>
+                </p>
+            </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signup-form');
+            const fields = form.querySelectorAll('.form-control');
+
+            fields.forEach(field => {
+                // Création d'un élément de feedback pour afficher les messages d'erreur
+                const feedback = document.createElement('div');
+                feedback.classList.add('feedback');
+                field.parentNode.insertBefore(feedback, field.nextSibling);
+
+                // Validation à l'événement 'input' et 'blur' pour les retours instantanés
+                field.addEventListener('input', function() {
+                    validateField(field, feedback);
+                });
+
+                field.addEventListener('blur', function() {
+                    validateField(field, feedback);
+                });
+            });
+        });
+
+        // Fonction de validation qui vérifie la validité du champ et affiche les messages
+        function validateField(field, feedback) {
+            if (field.checkValidity()) {
+                feedback.classList.remove('text-danger');
+                feedback.classList.add('text-success');
+                feedback.textContent = 'Valid';
+            } else {
+                feedback.classList.remove('text-success');
+                feedback.classList.add('text-danger');
+                feedback.textContent = field.validationMessage;
+            }
+        }
+    </script>
+{% endblock signup %}

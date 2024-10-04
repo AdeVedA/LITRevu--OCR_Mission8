@@ -1,0 +1,242 @@
+body {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: italic;
+    position: relative;
+    z-index: 1;
+}
+
+.literata-900 {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: italic;
+}
+
+.literata-700 {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.literata-600 {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: italic;
+}
+
+.literata-500 {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.literata-400 {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.literata-300 {
+    font-family: "Literata", serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: italic;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("../images/background.jpg") no-repeat center center;
+    background-size: cover;
+    filter: grayscale(55%);
+    z-index: -1;
+}
+
+li a {
+    color: whitesmoke;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.front {
+    z-index: 1000;
+}
+
+.form-label {
+    background-color: transparent;
+    color: inherit;
+}
+
+.feedback {
+    margin-top: 0.1rem;
+    font-size: 1rem;
+    padding: 0.1rem;
+    border-radius: 0.25rem;
+    display: none; /* Masquer par défaut */
+}
+
+.text-success {
+    background-color: black;
+    color: green;
+    display: block;
+}
+
+.text-danger {
+    background-color: black;
+    color: red;
+    display: block;
+}
+
+/* HEADER */
+.sticky-top {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1080;
+}
+
+.header-gradient {
+    background: linear-gradient(1deg, rgba(9,10,59,1) 0%, rgba(3,22,51,0.6) 60%, rgba(71,43,14,0.2) 100%);
+    width: 100%;
+}
+
+/* MAIN ET ELEMENTS */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    padding: 0px;
+}
+
+.critique-link {
+    margin: 0px 30px 2px 30px;
+    padding: 3px 20px 10px 20px;
+    background-color:rgb(9, 10, 59);
+    color: white;
+    text-decoration: none;
+    border: 1px solid #ffc107;
+    border-top: 0px;
+    border-radius: 0px 0px 5px 5px;
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+.critique-link:hover {
+    color: rgb(9, 10, 59);
+    background-color: #ffc107;
+    border: 1px solid cyan
+}
+
+.tickets-container {
+    text-align: center;
+    width: 80%;
+    max-width: 1280px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+.critique-box {
+    background-color: rgb(9, 10, 59);
+    color: black;
+    border: 1px solid #ffc107;
+    text-align: center;
+    width: 100%;
+    max-width: 1280px;
+    padding: 20px 35px 10px 35px;
+    margin-top: 10px;
+    background: url("../images/old-book.jpg") repeat;
+    background-size: 100%;
+    filter: grayscale(15%); 
+    filter: drop-shadow(0px 0px 20px #ffc107) invert(10%);
+    /*filter: hue-rotate(20deg);*/
+}
+
+.billet-box {
+    color: black;
+    border: 1px solid #ffc107;
+    text-align: center;
+    width: 100%;
+    max-width: 1280px;
+    padding: 20px 20px 10px 20px;
+    margin-top: 15px;
+    background: url("../images/old-book.jpg") repeat;
+    background-size: 100%;
+    filter: drop-shadow(0px -4px 30px whitesmoke);
+}
+
+.image-ticket {
+    max-width: 200px;
+    max-height: 300px;
+    padding: 5px 20px 5px 5px;
+}
+
+.ticket-page-title {
+    position: sticky; /* Position sticky pour que le bandeau suive la page après le header */
+    top: 0; /* Il s'aligne directement sous l'élément précédent (le header) */
+    z-index: 1030; /* Reste devant les autres éléments */
+    background-color: rgba(9, 10, 59, 0.5); /* Bleu nuit profond */
+    text-align: center;
+    color: #ffc107; /* Texte en jaune */
+    width: 100%;
+    border-bottom: 2px solid #ffc107;
+    border-right: 1px solid #ffc107;
+    border-left: 1px solid #ffc107;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    font-style: italic;
+}
+
+.backgr-indigo {
+    background-color: rgba(46,0,79, 0.8);
+}
+
+/* le bandeau déroulant de notification */
+
+.fixed-notification {
+    position: sticky; /* Position sticky pour que le bandeau suive la page après le header */
+    top: 0; /* Il s'aligne directement sous l'élément précédent (le header) */
+    z-index: 1030;
+    background-color: rgba(9, 10, 59, 0.5); /* Bleu nuit profond */
+    text-align: center;
+    color: #ffc107;
+    width: 100%;
+    overflow-y: none; /* faire défiler en mettant auto */
+    max-height: 350px; /* Limite la hauteur pour éviter trop de contenu visible */
+}
+
+.fixed-notification .btn-close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #ffc107;
+    z-index: 1050;
+}
+
+.fixed-notification .btn-close:hover {
+    color: #fff; /* Changement de couleur sur hover */
+}
+
+.fixed-notification .alert {
+    margin-bottom: 0;
+}
+
+/* les formulaires de contact/abonnements/following */
+.following-form {
+    max-width: 600px;
+    min-width: 100px;
+}
+
+.following-submit {
+    min-width: 100px;
+}

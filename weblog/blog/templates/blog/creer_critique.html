@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+<main class="main-content Literata-500">
+    <div class="justify-content-center align-content-center pt-0 mt-0 pb-1 px-1 mb-1">
+        <div class="ticket-page-title pb-2">{% if is_editing %}Modifier la critique{% else %}Critique en réponse à un billet{% endif %}</a>
+    </div>
+    <div class="container mt-4 justify-content-center align-content-center py-2">
+        
+        <!-- Affichage du billet via le partial -->
+        <div class="mt-2 mb-2">
+            {% include 'blog/partials/ticket_mesposts.html' with ticket=ticket %}
+        </div>
+        <!-- Formulaire pour la critique -->
+        <h4 class="mt-4 mb-0 backgr-indigo text-center p-1">Critique</h4>
+        <form method="post" class="Literata-500 ticket-page-title">
+            {% csrf_token %}
+            <div class="mb-3 mx-3 row">
+                <label for="headline" class="form-label col-auto">Résumé de votre critique</label>
+                {{ form.headline }}
+            </div>
+            <div class="mb-3 mx-3 mx-xs-0 row">
+                <label for="rating" class="form-label col-auto">Note (de 0 à 5)</label>
+                <div class="d-flex">
+                    {% for radio in form.rating %}
+                        <div class="form-check form-check-inline align-middle ms-lg-4 ms-xs-0">
+                            {{ radio.tag }}
+                            <label class="form-check-label ms-1">{{ radio.choice_label }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="mb-3 mx-3 row">
+                <label for="body" class="form-label col-auto">Commentaire de votre critique</label>
+                {{ form.body }}
+            </div>
+            <div class="d-grid d-md-flex justify-content-md-end pe-2">
+                <button type="submit" class="btn btn-primary my-3 mx-2">Envoyer</button>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}

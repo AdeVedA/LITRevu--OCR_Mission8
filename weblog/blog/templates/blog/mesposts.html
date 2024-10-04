@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block posts %}
+<main class="main-content">
+    <div class="tickets-container">
+        {% if mesposts_items %}
+            {% for item in mesposts_items %}
+                {% if item.type == 'ticket' %}
+                    {% include 'blog/partials/ticket_mesposts.html' with ticket=item %}
+                {% elif item.type == 'review' %}
+                    {% include 'blog/partials/review_mesposts.html' with review=item %}
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>Aucun billet n'est disponible.</p>
+        {% endif %}
+    </div>
+</main>
+
+<!-- Modale de confirmation de suppression de post -->
+<div class="modal fade mt-5" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmation de suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer cet élément ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form id="confirmDeleteForm" method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('DOM chargé')
+        let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'))
+        console.log('Modal initialisée:', deleteModal)
+        document.getElementById('deleteModal').addEventListener('show.bs.modal', function (event) {
+            console.log('Événement show.bs.modal déclenché')
+            // Récupérer les informations du bouton déclencheur
+            let button = event.relatedTarget;
+            let url = button.getAttribute('data-url');
+            let confirmDeleteForm = document.getElementById('confirmDeleteForm');
+            confirmDeleteForm.setAttribute('action', url);
+        });
+    });
+</script>
+{% endblock posts %}

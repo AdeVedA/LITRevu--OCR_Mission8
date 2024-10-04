@@ -1,0 +1,23 @@
+<div class="billet-box ticket-item d-flex flex-column mb-4">
+    <div class="row literata-500">
+        {% if ticket.user == request.user %}
+            <p class="col text-start">Vous avez demandé une critique</p>
+        {% else %}
+            <p class="col text-start">{{ ticket.user.username }} a demandé une critique</p>
+        {% endif %}
+            <p class="col text-end">{{ ticket.time_created }}</p>
+    </div>
+    <div class="d-flex row gap-1 row-gap-1 flex-grow-1">
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" class="m-0 me-lg-2 pe-lg-2 image-ticket" alt="Image de {{ticket.title}}">
+        {% endif %}
+        <div class="d-flex flex-column col-sm m-0 m-lg-1 p-lg-1">
+            <h3 class="text-start literata-700">{{ ticket.title }}</h3>
+            <p class="text-start literata-700 flex-grow-1">{{ ticket.description }}</p>
+            <div class="d-flex justify-content-end align-content-end pe-0">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+</div>

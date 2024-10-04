@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+<div class="container text-center">
+    <h1>Merci de votre visite, cher lecteur ! À bientôt.</h1>
+    <p>Vous serez redirigé vers la page d'accueil dans <span id="countdown">3</span> secondes...</p>
+</div>
+<script>
+    let countdown = 3
+    const countdownElement = document.getElementById('countdown')
+    const countdownInterval = setInterval(function() {
+        countdown--
+        countdownElement.textContent = countdown;
+        if (countdown <= 0) {
+            clearInterval(countdownInterval);
+            window.location.href = '/'
+        }
+    }, 1000);
+</script>
+{% endblock content %}

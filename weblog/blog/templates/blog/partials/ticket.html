@@ -1,0 +1,10 @@
+{% extends 'blog/partials/ticket_base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+    {% if ticket.user == request.user and ticket.has_a_review %}
+    {% else %}
+        <a href="{% url 'blog:creer_critique' ticket.id %}" class="critique-link literata-300 mt-2 mx-2">Créer une critique</a>
+    {% endif %}
+{% endblock content %}
