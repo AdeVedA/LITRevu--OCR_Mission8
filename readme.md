@@ -3,7 +3,7 @@
 <p align="center">
   <br/>
   <picture> 
-    <img alt="logo de LITReview" src="weblog/static/images/LITRevu.png" width="200">
+    <img alt="logo de LITReview" src="weblog/static/images/LITrevu.png" width="300">
   </picture>
   <br/>
   <br/>
