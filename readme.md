@@ -86,7 +86,7 @@ puis :
 
   #### G - mettez-vous dans le répertoire du projet et lancez le serveur (l'environnement virtuel doit avoir été activé avant):
 
-  cd weblog
+    cd weblog
 
 puis
 
@@ -150,7 +150,7 @@ puis :
 
   #### G - mettez-vous dans le répertoire du projet et lancez le serveur (l'environnement virtuel doit avoir été activé avant):
 
-  cd weblog
+    cd weblog
 
 puis
 
