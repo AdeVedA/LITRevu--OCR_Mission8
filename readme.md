@@ -84,15 +84,19 @@ puis :
 	
 	pip install -r requirements.txt
 
-  #### G - Lancement du serveur (l'environnement virtuel doit avoir été activé avant):
+  #### G - mettez-vous dans le répertoire du projet et lancez le serveur (l'environnement virtuel doit avoir été activé avant):
+
+  cd weblog
+
+puis
 
 	python3 manage.py runserver
 
-  #### H - Démarrez l'application Web LITRevu dans votre navigateur web en inscrivant l'adresse :
+  #### H - démarrez l'application Web LITRevu dans votre navigateur web en inscrivant l'adresse :
 
 	http://127.0.0.1:8000/
 
-  #### I - Fermez le serveur et désactivez l'environnement virtuel quand vous avez fini dans le terminal :
+  #### I - fermez le serveur et désactivez l'environnement virtuel quand vous avez fini dans le terminal :
 
 	ctrl +c
 
@@ -144,15 +148,19 @@ puis :
 	
 	pip install -r requirements.txt
 
-  #### G - Lancement du serveur (l'environnement virtuel doit avoir été activé avant):
+  #### G - mettez-vous dans le répertoire du projet et lancez le serveur (l'environnement virtuel doit avoir été activé avant):
+
+  cd weblog
+
+puis
 
 	python3 manage.py runserver
-  
-  #### H - Démarrez l'application Web LITRevu dans votre navigateur web en inscrivant l'adresse :
+
+  #### H - démarrez l'application Web LITRevu dans votre navigateur web en inscrivant l'adresse :
 
 	http://127.0.0.1:8000/
 
-  #### I - Fermez le serveur et désactivez l'environnement virtuel quand vous avez fini dans le terminal :
+  #### I - fermez le serveur et désactivez l'environnement virtuel quand vous avez fini dans le terminal :
 
 	ctrl +c
 
