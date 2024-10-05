@@ -24,7 +24,8 @@ class TicketForm(forms.ModelForm):
 
     def clean_image(self):
         image = self.cleaned_data.get('image')
-        if image:
+        #si il y a une image et qu'elle est un fichier (avec attribut 'taille de fichier')
+        if image and hasattr(image, 'size'):
             # Appel de la méthode statique valid_image_size 
             # pour vérifier la taille du fichier de l'image
             is_valid, size_error_message = Ticket.valid_image_size(image)

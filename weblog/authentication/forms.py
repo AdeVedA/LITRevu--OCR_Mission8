@@ -44,7 +44,8 @@ class SignUpForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if CustomUser.objects.filter(email=email).exists():
-            raise forms.ValidationError("Cette adresse e-mail est déjà utilisée. N'êtes-vous pas déjà inscrit ?")
+            raise forms.ValidationError(
+                "Cette adresse e-mail est déjà utilisée. N'êtes-vous pas déjà inscrit ?")
         return email
 
     def clean_password1(self):

@@ -5,7 +5,7 @@
 {% block content %}
 <main class="main-content Literata-500">
     <div class="justify-content-center align-content-center pt-0 mt-0 pb-1 px-1 mb-1 w-75">
-        <div class="ticket-page-title pb-2">{% if is_editing %}Modifier le billet{% else %}Création d'un billet (demande de critique){% endif %}</a>
+        <div class="ticket-page-title fw-semibold pb-2">{% if is_editing %}Modifier le billet{% else %}Création d'un billet (demande de critique){% endif %}</a>
     </div>
     <div class="container mt-4 justify-content-center align-content-center py-2 p-3">
         <!-- Formulaire POST avec enctype="multipart/form-data" pour permettre le téléchargement de fichiers -->
@@ -39,6 +39,7 @@
         </form>
     </div>
 </main>
+<!-- script js pour afficher un aperçu de l'image -->
 <script>
     function readURL(input) {
         if (input.files && input.files[0]) {

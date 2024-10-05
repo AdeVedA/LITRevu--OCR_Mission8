@@ -236,7 +236,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
     def get_success_url(self):
         if not self.get_object():
             return reverse('blog:flux')  # Redirige vers le flux après l'envoi de la critique
-        return reverse('blog:mesposts')
+        return reverse('blog:mesposts')  # Redirige vers le mesposts après la modification de la critique
 
 class PostDeleteView(LoginRequiredMixin, View):
 
