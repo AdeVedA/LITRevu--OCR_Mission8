@@ -9,8 +9,8 @@
   <br/>
 </p>
 
-### <p align="center">- Application Web de critique littéraire -</p>
-
+### <p align="center">- Application Web -</p>
+### <p align="center">- Réseau social de critique littéraire -</p>
 # <p align="center"> I. Description du Projet</p>
 
 Cette application Web de type "revue littéraire" permet aux abonnés de LITRevu de : 

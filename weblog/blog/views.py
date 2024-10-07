@@ -1,11 +1,12 @@
 from django.views import View
-from django.urls import reverse, reverse_lazy # reverse_lazy permet de rediriger vers une URL une fois une action terminée
+from django.urls import reverse, reverse_lazy # reverse_lazy redirige vers une URL une fois une action terminée
 from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import Http404
+from django.core.exceptions import PermissionDenied
 from .forms import FollowUserForm, TicketForm, ReviewForm
 from .models import Ticket, Review, UserFollows, UserBlock
 
@@ -107,8 +108,10 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
                 username = form.cleaned_data['username']
                 try:
                     user_to_follow = User.objects.get(username=username)
-                    user_already_followed = UserFollows.objects.filter(user=request.user, followed_user=user_to_follow).exists()
-                    user_blocked_you = UserBlock.objects.filter(user=user_to_follow, blocked_user=request.user).exists()
+                    user_already_followed = UserFollows.objects.filter(
+                        user=request.user, followed_user=user_to_follow).exists()
+                    user_blocked_you = UserBlock.objects.filter(
+                        user=user_to_follow, blocked_user=request.user).exists()
                     
                     # si utilisateur bloqué par l'utilisateur qu'il veut suivre
                     if user_blocked_you:
@@ -170,12 +173,13 @@ class TicketView(LoginRequiredMixin, CreateView, UpdateView):
     template_name = 'blog/modifier_billet.html'
     success_url = reverse_lazy('blog:mesposts') # Redirection vers le flux après modification ou création
 
-    # Méthode pour afficher le formulaire
+    # Méthode pour afficher le formulaire avec (modif) ou sans (création) contenu
     def get_object(self):
         # Récupérer le ticket s'il y a un `ticket_id` dans les kwargs, sinon renvoyer None
         ticket_id = self.kwargs.get('ticket_id')
         if ticket_id:
-            return get_object_or_404(Ticket, id=ticket_id)
+            ticket = get_object_or_404(Ticket, id=ticket_id, user=self.request.user)
+            return ticket
         return None
 
     def form_valid(self, form):
@@ -203,7 +207,8 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
         """
         review_id = self.kwargs.get('review_id')  # On récupère l'ID de la critique
         if review_id:
-            return get_object_or_404(Review, id=review_id)
+            review = get_object_or_404(Review, id=review_id, user=self.request.user)
+            return review
         return None
 
     # Surcharge de la méthode de récupération de contexte pour inclure le billet dans le contexte
@@ -211,7 +216,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
         context = super().get_context_data(**kwargs)
         
         if self.get_object():
-            # En modification, on récupère le ticket lié à la critique
+            # Alors on est en modification, et on récupère le ticket lié à la critique
             ticket = self.get_object().ticket
         else:
             # En création, on récupère le ticket via l'ID de l'URL
@@ -226,7 +231,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
 
     # Surcharge pour associer la critique avec le billet et l'utilisateur
     def form_valid(self, form):
-        if not self.get_object():  # Création : on associe le billet
+        if not self.get_object():  # Si on est en création : on associe le billet
             form.instance.ticket = get_object_or_404(Ticket, id=self.kwargs['ticket_id'])
 
         form.instance.user = self.request.user  # L'utilisateur connecté devient l'auteur de la critique
@@ -243,9 +248,11 @@ class PostDeleteView(LoginRequiredMixin, View):
     def get_object(self, post_type, post_id):
         # Récupérer dynamiquement l'objet selon le type
         if post_type == 'ticket':
-            return get_object_or_404(Ticket, id=post_id, user=self.request.user)
+            return get_object_or_404(
+                Ticket.objects.select_related('user'), id=post_id, user=self.request.user)
         elif post_type == 'review':
-            return get_object_or_404(Review, id=post_id, user=self.request.user)
+            return get_object_or_404(
+                Review.objects.select_related('user', 'ticket'), id=post_id, user=self.request.user)
         else:
             # Si le type est invalide, retourne une 404
             raise Http404("Type de post invalide.")
