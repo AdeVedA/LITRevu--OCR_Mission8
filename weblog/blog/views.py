@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.http import Http404
-from django.core.exceptions import PermissionDenied
 from .forms import FollowUserForm, TicketForm, ReviewForm
 from .models import Ticket, Review, UserFollows, UserBlock
 
@@ -19,26 +18,38 @@ class FluxView(LoginRequiredMixin, View):
     def get(self, request):
         # Récupérer l'utilisateur connecté
         user = request.user
+
         # Récupérer les utilisateurs que cet utilisateur suit
         followed_users = UserFollows.objects.filter(user=user).values_list('followed_user', flat=True)
 
         # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit
-        tickets = Ticket.objects.filter(user__in=[user] + list(followed_users)).order_by('-time_created')
-        for ticket in tickets: # Ajouter un attribut type pour les identifier dans le html
-            ticket.type = 'ticket'
+        tickets = Ticket.objects.filter(
+            user__in=[user] + list(followed_users)).prefetch_related('review_set')
 
         # Récupérer les critiques associées à ces tickets
-        reviews = Review.objects.filter(ticket__in=tickets).order_by('-time_created')
+        reviews = Review.objects.filter(
+            ticket__in=tickets).select_related('ticket', 'user')
+
+        # Identifie les tickets déjà critiqués
         reviewed_ticket_ids = {review.ticket.id for review in reviews}  # Set des IDs de tickets avec critiques
-        for review in reviews: # Ajouter attribut d'identification
+
+        # Filtrer les tickets pour exclure ceux qui ont déjà une critique
+        tickets_without_reviews = [
+            ticket for ticket in tickets if ticket.id not in reviewed_ticket_ids]
+
+        # Ajouter un attribut type pour les identifier dans le html
+        for ticket in tickets:
+            ticket.type = 'ticket'
+
+        # Ajouter attribut d'identification
+        for review in reviews:
             review.type = 'review'
             review.star_rating = '★' * review.rating + '☆' * (5 - review.rating)
 
-        # Filtrer les tickets pour exclure ceux qui ont déjà une critique
-        tickets_without_reviews = [ticket for ticket in tickets if ticket.id not in reviewed_ticket_ids]
-
-        # Combiner les deux et les trier par ordre de création (antéchronologique)
-        flux_items = sorted(list(tickets_without_reviews) + list(reviews), key=lambda x: x.time_created, reverse=True)
+        # Combiner tickets sans critiques et critiques et les trier par ordre de création (antéchronologique)
+        flux_items = sorted(
+            list(tickets_without_reviews) + list(reviews),
+            key=lambda x: x.time_created, reverse=True)
 
         # Préparer le contexte avec la liste des éléments du flux
         context = {
@@ -100,9 +111,10 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        # Méthode qui gère les requêtes HTTP POST
-        # pour suivre un utilisateur
+        # Méthode qui gère les requêtes HTTP POST pour suivre un utilisateur
+        # Si la clé 'follow' est dans le POST de la requête
         if 'follow' in request.POST:
+            # on instancie un formulaire FollowUserForm avec POST
             form = FollowUserForm(request.POST)
             if form.is_valid():
                 username = form.cleaned_data['username']

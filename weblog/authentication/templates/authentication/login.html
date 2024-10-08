@@ -2,14 +2,14 @@
 {% load django_bootstrap5 %}
 
 {% block login %}
-<main class="d-flex align-items-center min-vh-100">
-    <div class="container text-center px-0">
-        <div class="d-flex justify-content-evenly gap-5 row-gap-5">
-            <div class="col-6 m-0 me-lg-5 pe-lg-5">
+<main class="d-flex align-items-sm-center min-vh-100">
+    <div class="container justify-self-center text-center px-0">
+        <div class="d-sm-flex mx-2">
+            <div class="col-12 col-sm-6 me-md-2 pe-md-3 mt-5 mt-sm-0">
                 <h1 class="fw-bold shadow-lg">Inscrivez-vous maintenant</h1>
                 <a class="btn rounded bg-primary text-white text-light-emphasis mt-3" href="/signup">S'inscrire</a>
             </div>
-            <div class="col-6 m-0 ms-lg-5 ps-lg-5">
+            <div class="col-12 col-sm-6 ms-md-2 ps-md-3 mt-5 mt-sm-0">
                 <h1 class="fw-bold">Connectez-vous</h1>
                 <form method="post" action="{% url 'authentication:login' %}">
                     {% csrf_token %}
