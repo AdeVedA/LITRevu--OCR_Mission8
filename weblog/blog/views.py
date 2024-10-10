@@ -80,11 +80,6 @@ class PostsView(LoginRequiredMixin, TemplateView):
             review.type = 'review'
             review.star_rating = '★' * review.rating + '☆' * (5 - review.rating)
 
-        # Set des IDs de tickets avec critiques
-        # reviewed_ticket_ids = {review.ticket.id for review in reviews}
-        # Filtrer les tickets pour exclure ceux qui ont déjà une critique
-        # tickets_without_reviews = [ticket for ticket in tickets if ticket.id not in reviewed_ticket_ids]
-
         # Combiner les deux et les trier par ordre de création (antéchronologique)
         mesposts_items = sorted(list(tickets) + list(reviews), key=lambda x: x.time_created, reverse=True)
 

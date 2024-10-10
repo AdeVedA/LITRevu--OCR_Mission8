@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Ticket, Review, UserFollows, UserBlock
-from .forms import TicketForm, ReviewForm
+from .forms import TicketForm, ReviewForm, StarRatingWidget
 
 
 class TicketAdmin(admin.ModelAdmin):
@@ -9,8 +9,7 @@ class TicketAdmin(admin.ModelAdmin):
         ("Billet", {"fields": ["title", "description", "image"]}),
         ("Créateur", {"fields": ["user"]}),
     ]
-    # inlines =[DetailsInline]
-    list_display = ["title", "time_created", "was_published_recently", "has_a_review", "description"]
+    list_display = ["title", "user", "has_a_review", "description", "image", "time_created", "was_published_recently"]
     list_filter = ["time_created"]
     search_fields = ["title"]
 
@@ -21,10 +20,16 @@ class ReviewAdmin(admin.ModelAdmin):
         ("Créateur", {"fields": ["user"]}),
         ("Billet lié (en réponse à...)", {"fields": ["ticket"]}),
     ]
-    # inlines =[DetailsInline]
-    list_display = ["headline", "rating", "time_created", "ticket", "user", "body"]
+    list_display = ["headline", "rating", "user", "time_created", "body", "ticket"]
     list_filter = ["time_created"]
-    search_fields = ["ticket"]
+    search_fields = ["headline"]
+    
+    # Surcharger la méthode formfield_for_dbfield pour utiliser 
+    # l'élégant widget de formulaire en étoiles pour l'administration
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'rating':
+            kwargs['widget'] = StarRatingWidget()
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 class UserFollowsAdmin(admin.ModelAdmin):
     fieldsets = [

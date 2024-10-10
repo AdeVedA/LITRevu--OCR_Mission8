@@ -15,7 +15,7 @@ class UserFollows(models.Model):
         # s'assurer de ne pas avoir plusieurs instances de UserFollows
         # et de n'avoir que des paires uniques user-user_followed
         unique_together = ('user', 'followed_user', )
-        verbose_name = 'réseau social'
+        verbose_name = 'suivi d\'utilisateur'
         verbose_name_plural = 'Utilisateurs & Suivis'
 
     def __str__(self):
@@ -31,6 +31,8 @@ class UserBlock(models.Model):
         # s'assurer de ne pas avoir plusieurs instances de UserBlock
         # et n'avoir que des paires uniques user-blocked_user
         unique_together = ('user', 'blocked_user', )
+        verbose_name = 'blocage d\'utilisateur'
+        verbose_name_plural = 'Utilisateurs bloqués'
 
     def __str__(self):
         return f'{self.user} a bloqué {self.blocked_user}'
