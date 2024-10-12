@@ -12,17 +12,18 @@ from .models import Ticket, Review, UserFollows, UserBlock
 
 User = get_user_model()
 
+# vue gérant le flux d'actualité (billets/critiques de l'utilisateur connecté et des utilisateurs suivis)
 class FluxView(LoginRequiredMixin, View):
-    # Cette vue nécessite que l'utilisateur soit connecté (LoginRequiredMixin)
 
     def get(self, request):
         # Récupérer l'utilisateur connecté
         user = request.user
 
-        # Récupérer les utilisateurs que cet utilisateur suit
+        # Récupérer les utilisateurs que cet utilisateur suit (en liste d'ID plutôt qu'objets)
         followed_users = UserFollows.objects.filter(user=user).values_list('followed_user', flat=True)
 
-        # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit
+        # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit (ticket dont le user figure dans la liste+), 
+        # et précharger les critiques liées par la ForeignKey 'ticket'
         tickets = Ticket.objects.filter(
             user__in=[user] + list(followed_users)).prefetch_related('review_set')
 
@@ -41,7 +42,7 @@ class FluxView(LoginRequiredMixin, View):
         for ticket in tickets:
             ticket.type = 'ticket'
 
-        # Ajouter attribut d'identification
+        # Ajouter attribut type d'identification et afficher la note en étoiles
         for review in reviews:
             review.type = 'review'
             review.star_rating = '★' * review.rating + '☆' * (5 - review.rating)
@@ -59,6 +60,7 @@ class FluxView(LoginRequiredMixin, View):
         # Rendre le template 'flux.html' avec le contexte
         return render(request, 'blog/flux.html', context)
 
+# Vue gérant l'affichage de tous les posts (billets, critiques...) de l'utilisateur connecté
 class PostsView(LoginRequiredMixin, TemplateView):
     # Cette vue nécessite que l'utilisateur soit connecté (LoginRequiredMixin)
     template_name = 'blog/mesposts.html'
@@ -90,6 +92,8 @@ class PostsView(LoginRequiredMixin, TemplateView):
         }
         return render(request,'blog/mesposts.html', context)
 
+# Vue pour la gestion du following de l'utilisateur connecté 
+# (s'abonner, se désabonner, bloquer, débloquer, et monitorer nos suivis et suiveurs)
 class SubscriptionView(LoginRequiredMixin, TemplateView):
     template_name = 'blog/mesabonnements.html'
     
@@ -189,11 +193,13 @@ class TicketView(LoginRequiredMixin, CreateView, UpdateView):
             return ticket
         return None
 
+    # Méthode appelée lorsque le formulaire soumis est valide pour sauvegarder les données en BDD
     def form_valid(self, form):
         # Associer l'utilisateur connecté au billet
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    # Méthode pour assembler le contexte qui sera passé au template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         ticket_id = self.kwargs.get('ticket_id')
@@ -207,11 +213,8 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
     form_class = ReviewForm
     template_name = 'blog/creer_critique.html'
 
+    # méthode pour identifier si on est en création (return none) ou en modification de critique (return review)
     def get_object(self, queryset=None):
-        """
-        Si un ID de critique est présent dans l'URL, on récupère l'objet Review correspondant.
-        Sinon, on retourne None, ce qui signifie qu'on crée une nouvelle critique.
-        """
         review_id = self.kwargs.get('review_id')  # On récupère l'ID de la critique
         if review_id:
             review = get_object_or_404(Review, id=review_id, user=self.request.user)
@@ -250,6 +253,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
             return reverse('blog:flux')  # Redirige vers le flux après l'envoi de la critique
         return reverse('blog:mesposts')  # Redirige vers le mesposts après la modification de la critique
 
+# Vue pour la suppression d'un billet ou d'une critique
 class PostDeleteView(LoginRequiredMixin, View):
 
     def get_object(self, post_type, post_id):
@@ -278,40 +282,39 @@ class PostDeleteView(LoginRequiredMixin, View):
         # Rediriger après suppression
         return redirect('blog:mesposts')
 
+# Vue pour la création conjointe d'une critique et d'un billet
 class BilletReviewView(LoginRequiredMixin, TemplateView):
     template_name = 'blog/creer_billet-critique.html'
     success_url = reverse_lazy('blog:flux')
 
-    # Utilisation de form_class pour spécifier plusieurs formulaires
+    # Méthode appelée au chargement (GET) pour ajouter des objets formulaires (Ticket&Review) au contexte du template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ticket_form'] = TicketForm()
         context['review_form'] = ReviewForm()
         return context
 
-    # Méthode pour gérer la soumission des deux formulaires
+    # Méthode pour gérer la soumission (POST) des deux formulaires
     def post(self, request, *args, **kwargs):
         ticket_form = TicketForm(self.request.POST, self.request.FILES)
         review_form = ReviewForm(self.request.POST)
 
         if ticket_form.is_valid() and review_form.is_valid():
-            # Sauvegarde du billet
+            # Sauvegarde du billet (mémoire, association user, BDD)
             ticket = ticket_form.save(commit=False)
             ticket.user = self.request.user  # Associer l'utilisateur connecté au billet
             ticket.save()
 
-            # Sauvegarde de la critique
+            # Sauvegarde de la critique (mémoire, association user & ticket relatif, BDD)
             review = review_form.save(commit=False)
             review.user = self.request.user  # Associer l'utilisateur connecté à la critique
             review.ticket = ticket  # Associer la critique au billet nouvellement créé
             review.save()
 
-            # Rediriger vers une URL de succès après soumission
+            # Rediriger vers l'URL "success_url" après soumission
             return redirect(self.success_url)
         else:
-            # Renvoyer le formulaire avec des erreurs
+            # Si invalidité, renvoyer le formulaire soumis avec les erreurs affichées
             return self.render_to_response(self.get_context_data(
                 ticket_form=ticket_form, review_form=review_form
             ))
-
-

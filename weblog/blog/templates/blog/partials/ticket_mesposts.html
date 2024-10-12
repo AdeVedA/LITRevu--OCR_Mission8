@@ -4,10 +4,12 @@
 
 {% block content %}
     {% if item.type == 'ticket' %}
-        <a href="{% url 'blog:modifier_billet' ticket_id=item.id %}" class="critique-link literata-300 mt-2 ms-2 mb-2">Modifier</a>
-        <a href="#" class="critique-link literata-300 mt-2 ms-2 mb-2 btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" 
-        data-url="{% url 'blog:supprimer_post' item.type item.id %}">
-        Supprimer
-        </a>
+        <a href="{% url 'blog:modifier_billet' ticket_id=item.id %}"
+        class="critique-link literata-300 mt-2 ms-2 mb-2"
+        aria-label="modifier votre demande de critique sur '{{ ticket.title }}'">Modifier</a>
+        <a href="#" class="critique-link literata-300 mt-2 ms-2 mb-2 btn-danger"
+        data-bs-toggle="modal" data-bs-target="#deleteModal" 
+        data-url="{% url 'blog:supprimer_post' item.type item.id %}"
+        aria-label="supprimer votre demande de critique sur '{{ ticket.title }}'">Supprimer</a>
     {% endif %}
 {% endblock content %}

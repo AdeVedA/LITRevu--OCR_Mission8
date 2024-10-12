@@ -6,8 +6,8 @@ from django.utils import timezone
 from django.contrib import admin
 
 
+# Modèle pour le suivi d'utilisateurs
 class UserFollows(models.Model):
-# classe pour le suivi d'utilisateurs
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')  # Utilisateur qui suit
     followed_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followed_by')  # Utilisateur suivi
 
@@ -21,8 +21,8 @@ class UserFollows(models.Model):
     def __str__(self):
         return f'{self.user} suit {self.followed_user}'
 
+# Modèle pour le blocage d'utilisateurs
 class UserBlock(models.Model):
-# classe pour le blocage d'utilisateurs
 
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocking')  # Utilisateur qui bloque
     blocked_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocked_by')  # Utilisateur bloqué
@@ -37,8 +37,8 @@ class UserBlock(models.Model):
     def __str__(self):
         return f'{self.user} a bloqué {self.blocked_user}'
 
+# Modèle Ticket pour une demande de critique (billet)
 class Ticket(models.Model):
-# Modèle Ticket pour une demande de critique
 
     title = models.CharField(max_length=128, verbose_name="Titre")  # Titre du livre ou article
     description = models.TextField(max_length=1024, verbose_name="Description", blank=True)  # Description ou résumé de la demande de critique
@@ -75,8 +75,8 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.title} créé par {self.user}"
 
-class Review(models.Model):
 # Modèle Review pour une critique de livre/article
+class Review(models.Model):
 
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(

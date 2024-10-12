@@ -3,6 +3,10 @@
 
 {% block socials %}
 <main>
+    <h1 class="visually-hidden">
+        Mes Abonnements : gestion de votre réseau - 
+        vous abonner ou vous désabonner, bloquer ou débloquer un abonné
+    </h1>
 <div class="literata-500">
     {% if messages %}
         <!-- Bandeau de notifications après le header... si messages ! -->
@@ -16,7 +20,7 @@
         </div>
     {% endif %}
     <div class="d-flex justify-content-center my-5">
-        <h3> Suivre d'autres utilisateurs </h3>
+        <h2> Suivre d'autres utilisateurs </h2>
     </div>
     <div class="d-flex justify-content-center my-sm-2">
         <form method="post" class="form-inline">
@@ -32,7 +36,7 @@
         </form>
     </div>
     <div class="d-flex justify-content-center my-5">
-        <h3> Abonnements </h3>
+        <h2> Abonnements </h2>
     </div>
     <div class="">
             <table class="table table-hover">
@@ -61,56 +65,64 @@
             </table>
     </div>
     <div class="d-flex justify-content-center my-5">
-        <h3> Abonnés </h3>
+        <h2> Abonnés </h2>
     </div>
     <div class="">
         <table class="table table-hover">
             {% for follower in followers %}
                 <tbody class="">
                     <tr class="row justify-content-center">
-                        <th class="col-4 text-start align-content-center grow-2" aria="{{ follower.user.username }}">
+                        <th class="col-4 text-start align-content-center grow-2"
+                        aria-label="{{ follower.user.username }}">
                             {{ follower.user.username }}
                         </th>
                         <td class="col-auto justify-content-end">
                             <form method="post" action="">
                                 {% csrf_token %}
                                 <!-- Afficher le bouton "Bloquer"-->
-                                <input type="hidden" name="block_user_id" aria="bloquer {{ follower.user.username }}" value="{{ follower.user.id }}">
+                                <input type="hidden" name="block_user_id"
+                                aria-label="bloquer {{ follower.user.username }}" value="{{ follower.user.id }}">
                                 <button type="submit" name="block" class="btn btn-danger">Bloquer</button>
                             </form>
                         </td>
                     </tr>
             {% empty %}
                 <tr class="row justify-content-center">
-                    <td colspan="2" class="col-auto px-2 text-start align-content-center grow-2" aria="Aucun suiveur">Personne ne vous suit pour l'instant.</td>
+                    <td colspan="2" class="col-auto px-2 text-start align-content-center grow-2"
+                    aria-label="Aucun suiveur">Personne ne vous suit pour l'instant.</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
     <div class="d-flex justify-content-center my-5">
-        <h3> Utilisateurs bloqués </h3>
+        <h2> Utilisateurs bloqués </h2>
     </div>
     <div class="">
         <table class="table table-hover">
             {% for blocked in blocked_users %}
                 <tbody class="">
                     <tr class="row justify-content-center">
-                        <th class="col-4 text-start align-content-center grow-2" aria="{{ blocked.blocked_user.username }}">
+                        <th class="col-4 text-start align-content-center grow-2"
+                        aria-label="{{ blocked.blocked_user.username }}">
                             <s>{{ blocked.blocked_user.username }}</s> <!-- Barrer le nom de l'utilisateur bloqué avec <s> -->
                         </th>
                         <td class="col-auto justify-content-end">
                             <form method="post" action="">
                                 {% csrf_token %}
                                 <!-- Afficher le bouton "Débloquer" si l'utilisateur est bloqué -->
-                                <input type="hidden" name="unblock_user_id" aria="débloquer {{ blocked.blocked_user.username }}" value="{{ blocked.blocked_user.id }}">
-                                <button type="submit" name="unblock" class="btn btn-success">Débloquer</button>
+                                <input type="hidden" name="unblock_user_id"
+                                aria-label="débloquer {{ blocked.blocked_user.username }}"
+                                value="{{ blocked.blocked_user.id }}">
+                                <button type="submit" name="unblock"
+                                class="btn btn-success">Débloquer</button>
                             </form>
                         </td>
                     </tr>
             {% empty %}
                 <tr class="row justify-content-center">
-                    <td colspan="2" class="col-auto px-2 text-start align-content-center grow-2" aria="Aucun utilisateur bloqué">Vous n'avez bloqué personne pour l'instant.</td>
+                    <td colspan="2" class="col-auto px-2 text-start align-content-center grow-2"
+                    aria-label="Aucun utilisateur bloqué">Vous n'avez bloqué personne pour l'instant.</td>
                 </tr>
             {% endfor %}
             </tbody>

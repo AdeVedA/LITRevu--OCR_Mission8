@@ -4,6 +4,9 @@
 
 {% block posts %}
 <main class="main-content">
+    <h1 class="visually-hidden">
+        Mes Posts : la page pour gérer vos publications (demandes & critiques), les modifier, les supprimer
+    </h1>
     <div class="tickets-container">
         {% if mesposts_items %}
             {% for item in mesposts_items %}
@@ -18,14 +21,13 @@
         {% endif %}
     </div>
 </main>
-
 <!-- Modale de confirmation de suppression de post -->
 <div class="modal fade mt-5" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirmation de suppression</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h2 class="modal-title" id="deleteModalLabel">Confirmation de suppression</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Veuillez confirmer la suppression ou annuler"></button>
             </div>
             <div class="modal-body">
                 Êtes-vous sûr de vouloir supprimer cet élément ?

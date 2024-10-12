@@ -1,7 +1,7 @@
 from django import forms
 from .models import Review, Ticket
 
-
+# formulaire pour le suivi d'autre utilisateur
 class FollowUserForm(forms.Form):
     username = forms.CharField(
         max_length=150,
@@ -12,6 +12,7 @@ class FollowUserForm(forms.Form):
         label=''
     )
 
+# formulaire pour le billet
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
@@ -33,10 +34,7 @@ class TicketForm(forms.ModelForm):
                 raise forms.ValidationError(size_error_message)
         return image
 
-class StarRatingWidget(forms.Select):
-    def __init__(self, attrs=None):
-        super().__init__(attrs, choices=[(i, '★' * i + '☆' * (5-i)) for i in range(6)])
-
+# formulaire pour la critique
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
@@ -46,3 +44,8 @@ class ReviewForm(forms.ModelForm):
                 choices=[(0, ' - 0'), (1, ' - 1'), (2, ' - 2'), (3, ' - 3'), (4, ' - 4'), (5, ' - 5')]),
             'body': forms.Textarea(attrs={'rows': '5'})
         }
+
+# formulaire/gadget pour l'affichage de la note critique avec étoiles (utilisé en backoffice)
+class StarRatingWidget(forms.Select):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, choices=[(i, '★' * i + '☆' * (5-i)) for i in range(6)])

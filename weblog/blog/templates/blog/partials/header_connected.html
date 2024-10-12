@@ -2,25 +2,56 @@
 <header class="literata-900 sticky-top">
     <nav class="navbar header-gradient border-bottom border-warning">
         <div class="container-fluid d-flex align-items-center position-relative">
-            <div class="d-none d-sm-flex literata-400 position-absolute start-1"> {{ user.username }} </div>
-            <div class="d-sm-none w-100 text-center literata-300 m-0"> {{ user.username }} </div>
             <div class="d-flex justify-content-center w-100">
-                <a class="navbar-brand fs-1 fw-bold mb-0" href="/">
-                    <img src="{% static 'images/LITrevu.png' %}" alt="Logo du site LITReview" width="70" height="70" class="">
-                    Revue Littéraire
+                <a class="navbar-brand mb-0 d-flex align-items-center" href="/">
+                    <img src="{% static 'images/LITrevu.png' %}" alt="Logo du site LITRevu" width="70" height="70" class="me-2">
+                    <div class="d-flex flex-column">
+                        <span class="fs-1 fw-bold pt-0 mt-0 mb-0 pb-0" style="line-height: 1; margin: 0;">LITRevu</span>
+                        <span class="literata-300 fw-light mt-0 pt-0 ms-5 ps-5">{{ user.username }}</span>
+                    </div>
                 </a>
             </div>
             <div class="d-none d-xl-flex position-absolute mt-1 end-0">
-                <a class="btn btn-outline-warning text-light literata-400 me-2" href="{% url 'blog:flux' %}">Flux</a>
-                <a class="btn btn-outline-warning text-light literata-400 me-2" href="{% url 'blog:mesposts' %}">Posts</a>
-                <a class="btn btn-outline-info text-light literata-400 me-2" href="{% url 'blog:mesabonnements' %}">Abonnements</a>
-                <a class="btn btn-outline-danger text-light literata-400 me-1" href="{% url 'authentication:logout' %}">Se déconnecter</a>
+                <a class="btn btn-outline-warning text-light literata-400 me-2"
+                href="{% url 'blog:flux' %}"
+                aria-label="Le Flux de revues littéraires - 
+                création de billets, de critiques et réponses-critiques aux demandes de votre réseau">
+                Flux</a>
+                <a class="btn btn-outline-warning text-light literata-400 me-2"
+                href="{% url 'blog:mesposts' %}"
+                aria-label="Vos Posts de revues littéraires - 
+                modification et suppression">
+                Posts</a>
+                <a class="btn btn-outline-info text-light literata-400 me-2"
+                href="{% url 'blog:mesabonnements' %}"
+                aria-label="Page de gestion de votre réseau - 
+                vous abonner ou vous désabonner, bloquer ou débloquer un abonné">
+                Abonnements</a>
+                <a class="btn btn-outline-danger text-light literata-400 me-1"
+                href="{% url 'authentication:logout' %}"
+                aria-label="Vous déconnecter du site">
+                Se déconnecter</a>
             </div>
             <div class="d-xl-none w-100 text-center mt-xl-2 m-0">
-                <a class="btn btn-outline-warning literata-400" href="{% url 'blog:flux' %}">Flux</a>
-                <a class="btn btn-outline-warning literata-400" href="{% url 'blog:mesposts' %}">Posts</a>
-                <a class="btn btn-outline-info literata-400" href="{% url 'blog:mesabonnements' %}">Abonnements</a>
-                <a class="btn btn-outline-danger text-light literata-400" href="{% url 'authentication:logout' %}">Se déconnecter</a>
+                <a class="btn btn-outline-warning literata-400"
+                href="{% url 'blog:flux' %}"
+                aria-label="Le Flux de revues littéraires - 
+                création de billets, de critiques et réponses-critiques aux demandes de votre réseau">
+                Flux</a>
+                <a class="btn btn-outline-warning literata-400"
+                href="{% url 'blog:mesposts' %}"
+                aria-label="Vos Posts de revues littéraires - 
+                modification et suppression">
+                Posts</a>
+                <a class="btn btn-outline-info literata-400"
+                href="{% url 'blog:mesabonnements' %}"
+                aria-label="Page de gestion de votre réseau - 
+                vous abonner ou vous désabonner, bloquer ou débloquer un abonné">
+                Abonnements</a>
+                <a class="btn btn-outline-danger text-light literata-400"
+                href="{% url 'authentication:logout' %}"
+                aria-label="Vous déconnecter du site">
+                Se déconnecter</a>
             </div>
         </div>
     </nav>

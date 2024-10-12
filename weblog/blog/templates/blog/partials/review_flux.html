@@ -10,7 +10,7 @@
     <div class="d-flex row gap-4 flex-grow-1">
         <div class="col m-0 m-lg-1 p-lg-1 d-flex flex-column">
             <div class="row">
-                <h3 class="col text-start row-gap-2 literata-700 pb-3">{{ review.headline }} - {{ review.star_rating }}</h3>
+                <h2 class="col text-start row-gap-2 literata-700 pb-3">{{ review.headline }} - {{ review.star_rating }}</h2>
                 <p class="text-start literata-700 flex-grow-1">{{ review.body }}</p>
                 <div class="d-flex justify-content-end align-content-end pe-1">
                     {% block content %}
@@ -28,7 +28,7 @@
                 {% else %}
                 <p class="col text-start">En réponse au billet de {{ review.ticket.user.username }}</p>
                 {% endif %}
-                <p class="col text-end">du {{ review.ticket.time_created }}</p>
+                <p class="col text-end" aria-label="date de publication">du {{ review.ticket.time_created }}</p>
             </div>
             <div class="d-flex row gap-1 row-gap-1 flex-grow-1">
                 {% if review.ticket.image %}
