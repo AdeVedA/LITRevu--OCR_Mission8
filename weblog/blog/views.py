@@ -186,7 +186,8 @@ class TicketView(LoginRequiredMixin, CreateView, UpdateView):
 
     # Méthode pour afficher le formulaire avec (modif) ou sans (création) contenu
     def get_object(self):
-        # Récupérer le ticket s'il y a un `ticket_id` dans les kwargs, sinon renvoyer None
+        # Récupérer le ticket s'il y a un `ticket_id` dans les kwargs 
+        # et si l'utilisateur connecté en est l'auteur, sinon renvoyer None
         ticket_id = self.kwargs.get('ticket_id')
         if ticket_id:
             ticket = get_object_or_404(Ticket, id=ticket_id, user=self.request.user)
@@ -217,6 +218,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
     def get_object(self, queryset=None):
         review_id = self.kwargs.get('review_id')  # On récupère l'ID de la critique
         if review_id:
+            # On récupère l'objet "review" en s'assurant que l'utilisateur connecté en est l'auteur
             review = get_object_or_404(Review, id=review_id, user=self.request.user)
             return review
         return None
