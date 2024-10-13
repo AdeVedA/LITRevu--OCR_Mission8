@@ -37,9 +37,6 @@ class SignUpForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'password1', 'password2')
-        # widget -> comment chaque champ apparait. 
-        # form-control est une classe CSS fournie par Bootstrap qui applique un style aux champs de formulaire (marges, bordures, etc.)
-        # placeholder permet d'afficher un texte temporaire à l'intérieur du champ, avant que l'utilisateur tape quelque chose
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

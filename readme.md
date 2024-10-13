@@ -1,9 +1,9 @@
-# <p align="center"><bold>LITRevu - OCR_Mission[8]</bold></p>
+# <p align="center"><bold>LITReview - OCR_Mission[8]</bold></p>
 <p align="center">=========================================================================</p>
 <p align="center">
   <br/>
   <picture> 
-    <img alt="logo de LITRevu" src="weblog/static/images/LITrevu.png" width="300">
+    <img alt="logo de LITReview" src="weblog/static/images/LITrevu.png" width="300">
   </picture>
   <br/>
   <br/>
@@ -13,7 +13,7 @@
 ### <p align="center">- Réseau social de critique littéraire -</p>
 # <p align="center"> I. Description du Projet</p>
 
-Cette application Web de type "revue littéraire" permet aux abonnés de LITRevu de : 
+Cette application Web de type "revue littéraire" permet aux abonnés de LITReview de : 
 - publier sur le site des demandes de critiques (billets)
 - des critiques en réponse à ces demandes
 - de publier les deux en un seul formulaire (une critique autonome avec billet intégré)
@@ -54,7 +54,7 @@ j'ai utilisé **django 5.1.1** et **bootstrap 5.3.3**
   #### A - Créez un répertoire pour le programme
 Lancez votre explorateur windows (WIN+E) 
 Créez un répertoire (CTRL+MAJ+N) pour le programme où vous le souhaitez et **nommez-le**
-ex. : vous pouvez l'appeler **LITRevu** dans d:\chemin\vers\mon\dossier\LITRevu
+ex. : vous pouvez l'appeler **LITReview** dans d:\chemin\vers\mon\dossier\LITReview
 **double-cliquez** sur le répertoire créé pour aller dedans.
 
   #### B - lancez l'interpréteur de commande windows
@@ -92,7 +92,7 @@ puis
 
 	python3 manage.py runserver
 
-  #### H - démarrez l'application Web LITRevu dans votre navigateur web en inscrivant l'adresse :
+  #### H - démarrez l'application Web LITReview dans votre navigateur web en inscrivant l'adresse :
 
 	http://127.0.0.1:8000/
 
@@ -119,13 +119,13 @@ clic sur loupe/recherche lancez
 	terminal
 	
   #### B - Créez un répertoire pour le programme et placez-vous dedans
-  par exemple si vous souhaitez appeler ce dossier "LITRevu" :
+  par exemple si vous souhaitez appeler ce dossier "LITReview" :
 
-	mkdir LITRevu
+	mkdir LITReview
 
 puis :
 
-	cd LITRevu
+	cd LITReview
 
   #### C - clonez le repo Github du projet dans ce répertoire
 dans le terminal (l'invite de commande) qui indique bien que vous êtes à l'adresse du dossier créé, écrivez tour à tour:
@@ -156,7 +156,7 @@ puis
 
 	python3 manage.py runserver
 
-  #### H - démarrez l'application Web LITRevu dans votre navigateur web en inscrivant l'adresse :
+  #### H - démarrez l'application Web LITReview dans votre navigateur web en inscrivant l'adresse :
 
 	http://127.0.0.1:8000/
 

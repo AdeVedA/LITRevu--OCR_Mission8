@@ -4,8 +4,7 @@
 {% block socials %}
 <main>
     <h1 class="visually-hidden">
-        Mes Abonnements : gestion de votre réseau - 
-        vous abonner ou vous désabonner, bloquer ou débloquer un abonné
+        Mes Abonnements : gestion de votre réseau - vous abonner ou vous désabonner, bloquer ou débloquer un abonné
     </h1>
 <div class="literata-500">
     {% if messages %}
@@ -26,7 +25,7 @@
         <form method="post" class="form-inline">
             {% csrf_token %}
             <div class="d-flex gap-2">
-                <div class="following-form">
+                <div class="following-form" aria-label="Entrez le nom de l'utilisateur auquel vous souhaitez vous abonner, et envoyez">
                     {% bootstrap_field form.username placeholder="Nom d'utilisateur" label=False %}
                 </div>
                 <div class="following-submit">
@@ -43,13 +42,13 @@
                 {% for follow in user_follows %}
                     <tbody class="">
                         <tr class="row justify-content-center">
-                            <th class="col-4 text-start align-content-center grow-2" aria="{{ follow.followed_user.username }}">
+                            <th class="col-4 text-start align-content-center grow-2" aria-label="{{ follow.followed_user.username }}">
                                 {{ follow.followed_user.username }}
                             </th>
                             <td class="col-auto justify-content-end">
                                 <form method="post" action="">
                                     {% csrf_token %}
-                                    <input type="hidden" name="unfollow_user_id" aria="se désabonner de {{ follow.followed_user.id }}" value="{{ follow.followed_user.id }}">
+                                    <input type="hidden" name="unfollow_user_id" aria-label="se désabonner de {{ follow.followed_user.id }}" value="{{ follow.followed_user.id }}">
                                     <button type="submit" name="unfollow" class="btn btn-danger">Désabonner</button>
                                 </form>
                             </td>

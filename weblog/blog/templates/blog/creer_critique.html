@@ -7,7 +7,6 @@
     <div class="justify-content-center align-content-center pt-0 mt-0 pb-1 px-1 mb-0 w-75">
         <h1 class="ticket-page-title fw-semibold pb-2">{% if is_editing %}Modifier la critique{% else %}Critique en réponse à un billet{% endif %}</h1>
     </div>
-
     <div class="container mt-1 justify-content-center align-content-center py-2">
 
         <!-- Affichage du billet via le partial -->
@@ -21,12 +20,14 @@
             <h2 class="mt-4 mb-0 backgr-indigo text-center p-1"
             aria-label="Votre critique de {{ ticket.title }}">Votre critique</h2>
             {{ form.non_field_errors }} <!-- Afficher les erreurs générales -->
+
             <div class="mb-3 mx-3 row">
                 <label for="headline" class="form-label col-auto"
                 aria-label="Titre/résumé de votre critique">Résumé de votre critique</label>
                 {{ form.headline }}
                 {{ form.headline.errors }}  <!-- Affichage des erreurs de titre -->
             </div>
+
             <div class="mb-3 mx-3 mx-xs-0 row">
                 <label for="rating" class="form-label col-auto"
                 aria-label="Note d'évaluation de l'ouvrage/article">Note (de 0 à 5)</label>
@@ -42,12 +43,14 @@
                     {{ form.rating.errors }}
                 </div>
             </div>
+
             <div class="mb-3 mx-3 row">
                 <label for="body" class="form-label col-auto"
                 aria-label="Votre commentaire critique de l'ouvrage/article">Commentaire de votre critique</label>
                 {{ form.body }}
                 {{ form.body.errors }}  <!-- Affichage des erreurs de commentaire -->
             </div>
+
             <div class="d-grid d-md-flex justify-content-md-end pe-2">
                 <button type="submit" class="btn btn-primary my-3 mx-2"
                 aria-label="Envoyer votre critique">Envoyer</button>

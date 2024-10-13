@@ -7,11 +7,12 @@
     <div class="p-2">
         <h1 class="fw-bold">Merci de votre visite, cher lecteur ! À bientôt.</h1>
     </div>
-    <div class="p-2 fw-semibold">Vous serez redirigé vers la page d'accueil dans <span id="countdown">3</span> secondes...</div>
+    <div class="p-2 fw-semibold">Vous serez redirigé vers la page d'accueil dans <span id="countdown">20</span> secondes...</div>
+    <div class="p-2 fw-semibold">Appuyez sur la barre d'espace pour passer ce compte-à-rebours</div>
 </div>
 <!-- script js pour compte-à-rebours avant redirection vers url de login.html -->
 <script>
-    let countdown = 3
+    let countdown = 20
     const countdownElement = document.getElementById('countdown')
     const countdownInterval = setInterval(function() {
         countdown--
@@ -21,5 +22,13 @@
             window.location.href = '/'
         }
     }, 1000);
+    // Ajoute un EventListener pour annuler l'attente en appuyant sur la barre d'espace
+    document.addEventListener('keydown', function(event) {
+        // Vérifie si la touche appuyée est la barre d'espace, annule le timer et redirige immédiatement
+        if (event.code === 'Space') {
+            clearInterval(countdownInterval);
+            window.location.href = '/';
+        }
+    });
 </script>
 {% endblock content %}

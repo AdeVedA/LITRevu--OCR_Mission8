@@ -8,8 +8,10 @@ from django.contrib import admin
 
 # Modèle pour le suivi d'utilisateurs
 class UserFollows(models.Model):
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')  # Utilisateur qui suit
-    followed_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followed_by')  # Utilisateur suivi
+    user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')  # Utilisateur qui suit
+    followed_user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='followed_by')  # Utilisateur suivi
 
     class Meta:
         # s'assurer de ne pas avoir plusieurs instances de UserFollows
@@ -24,8 +26,10 @@ class UserFollows(models.Model):
 # Modèle pour le blocage d'utilisateurs
 class UserBlock(models.Model):
 
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocking')  # Utilisateur qui bloque
-    blocked_user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocked_by')  # Utilisateur bloqué
+    user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocking')  # Utilisateur qui bloque
+    blocked_user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocked_by')  # Utilisateur bloqué
 
     class Meta:
         # s'assurer de ne pas avoir plusieurs instances de UserBlock
@@ -40,11 +44,16 @@ class UserBlock(models.Model):
 # Modèle Ticket pour une demande de critique (billet)
 class Ticket(models.Model):
 
-    title = models.CharField(max_length=128, verbose_name="Titre")  # Titre du livre ou article
-    description = models.TextField(max_length=1024, verbose_name="Description", blank=True)  # Description ou résumé de la demande de critique
-    time_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création") # Date de création/publication
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # L'utilisateur qui a créé le billet
-    image = models.ImageField(null=True, blank=True, verbose_name="image du billet", default='no_image.png') # image du billet
+    title = models.CharField(
+        max_length=128, verbose_name="Titre")  # Titre du livre ou article
+    description = models.TextField(
+        max_length=1024, verbose_name="Description", blank=True)  # Description du billet
+    time_created = models.DateTimeField(
+        auto_now_add=True, verbose_name="Date de création") # Date de création/publication
+    user = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # L'utilisateur qui a créé le billet
+    image = models.ImageField(
+        null=True, blank=True, verbose_name="image du billet", default='no_image.png') # image du billet
 
     IMAGE_MAX_FILE_SIZE = 2 * 1024 * 1024  # Limite de taille : 2 MB
     

@@ -16,18 +16,18 @@ User = get_user_model()
 class FluxView(LoginRequiredMixin, View):
 
     def get(self, request):
-        # Récupérer l'utilisateur connecté
+        # Récupérer l'utilisateur connecté (pas de requête en base, user est déjà dans l'objet request)
         user = request.user
 
-        # Récupérer les utilisateurs que cet utilisateur suit (en liste d'ID plutôt qu'objets)
+        # Récupérer les utilisateurs que cet utilisateur suit (en liste d'ID, plus efficiente, plutôt qu'objets)
         followed_users = UserFollows.objects.filter(user=user).values_list('followed_user', flat=True)
 
-        # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit (ticket dont le user figure dans la liste+), 
-        # et précharger les critiques liées par la ForeignKey 'ticket'
+        # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit, 
+        # & précharger (/combiner en mémoire) les critiques liées par la ForeignKey 'ticket' aux tickets
         tickets = Ticket.objects.filter(
             user__in=[user] + list(followed_users)).prefetch_related('review_set')
 
-        # Récupérer les critiques associées à ces tickets
+        # Récupérer les critiques associées à ces tickets en joignant tickets et utilisateurs (3 requêtes en 1)
         reviews = Review.objects.filter(
             ticket__in=tickets).select_related('ticket', 'user')
 
@@ -96,7 +96,7 @@ class PostsView(LoginRequiredMixin, TemplateView):
 # (s'abonner, se désabonner, bloquer, débloquer, et monitorer nos suivis et suiveurs)
 class SubscriptionView(LoginRequiredMixin, TemplateView):
     template_name = 'blog/mesabonnements.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # le formulaire pour suivre d'autres utilisateurs
@@ -123,7 +123,7 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
                         user=request.user, followed_user=user_to_follow).exists()
                     user_blocked_you = UserBlock.objects.filter(
                         user=user_to_follow, blocked_user=request.user).exists()
-                    
+
                     # si utilisateur bloqué par l'utilisateur qu'il veut suivre
                     if user_blocked_you:
                         messages.error(request, f"{username} vous a bloqué. Vous ne pouvez pas le suivre.")
@@ -226,7 +226,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
     # Surcharge de la méthode de récupération de contexte pour inclure le billet dans le contexte
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
+
         if self.get_object():
             # Alors on est en modification, et on récupère le ticket lié à la critique
             ticket = self.get_object().ticket
@@ -234,7 +234,7 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
             # En création, on récupère le ticket via l'ID de l'URL
             ticket_id = self.kwargs['ticket_id']
             ticket = get_object_or_404(Ticket, id=ticket_id)
-        
+
         # Ajouter le ticket au contexte pour l'afficher dans le template
         context['ticket'] = ticket
         # Ajoute une variable pour indiquer si c'est une modification

@@ -44,11 +44,11 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        console.log('DOM chargé')
+        // console.log('DOM chargé')
         let deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'))
-        console.log('Modal initialisée:', deleteModal)
+        // console.log('Modal initialisée:', deleteModal)
         document.getElementById('deleteModal').addEventListener('show.bs.modal', function (event) {
-            console.log('Événement show.bs.modal déclenché')
+            // console.log('Événement show.bs.modal déclenché')
             // Récupérer les informations du bouton déclencheur
             let button = event.relatedTarget;
             let url = button.getAttribute('data-url');
