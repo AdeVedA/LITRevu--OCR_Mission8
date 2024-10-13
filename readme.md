@@ -1,11 +1,10 @@
 # <p align="center"><bold>LITReview - OCR_Mission[8]</bold></p>
-<p align="center">=========================================================================</p>
+<p align="center">=====================================</p>
 <p align="center">
   <br/>
   <picture> 
     <img alt="logo de LITReview" src="weblog/static/images/LITrevu.png" width="300">
   </picture>
-  <br/>
   <br/>
 </p>
 
@@ -171,7 +170,7 @@ puis
 
 -------------------------
 # <p align="center">Annexe 1 - installation de Python & Git</p>
-=======================================================================
+<p align="center">====================================================</p>
 
 pour Windows 64bits :
 --------------------

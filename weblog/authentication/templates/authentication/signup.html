@@ -18,10 +18,12 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('signup-form');
-            const fields = form.querySelectorAll('.form-control');
+            const password1 = document.getElementById('id_password1');
+            const password2 = document.getElementById('id_password2');
+            const fields = form.querySelectorAll('.form-control:not(#id_password1):not(#id_password2)');
 
+            // Ajoute un feedback pour chaque champ (sauf mots de passe)
             fields.forEach(field => {
-                // Création d'un élément de feedback pour afficher les messages d'erreur
                 const feedback = document.createElement('div');
                 feedback.classList.add('feedback');
                 field.parentNode.insertBefore(feedback, field.nextSibling);
@@ -35,9 +37,27 @@
                     validateField(field, feedback);
                 });
             });
+
+            // Crée des éléments de feedback pour les mots de passe
+            const feedback1 = document.createElement('div');
+            feedback1.classList.add('feedback');
+            password1.parentNode.insertBefore(feedback1, password1.nextSibling);
+
+            const feedback2 = document.createElement('div');
+            feedback2.classList.add('feedback');
+            password2.parentNode.insertBefore(feedback2, password2.nextSibling);
+
+            // Validation spécifique pour les mots de passe
+            password1.addEventListener('input', function() {
+                validatePasswords(password1, password2);
+            });
+
+            password2.addEventListener('input', function() {
+                validatePasswords(password1, password2);
+            });
         });
 
-        // Fonction de validation qui vérifie la validité du champ et affiche les messages
+        // Fonction de validation qui vérifie la validité du champ (pwd exclus) et affiche les messages
         function validateField(field, feedback) {
             if (field.checkValidity()) {
                 feedback.classList.remove('text-danger');
@@ -47,6 +67,40 @@
                 feedback.classList.remove('text-success');
                 feedback.classList.add('text-danger');
                 feedback.textContent = field.validationMessage;
+            }
+        }
+        // Validation combinée de la longueur du mot de passe et de la correspondance
+        function validatePasswords(password1, password2) {
+            const feedback1 = password1.nextElementSibling; // Feedback pour password1
+            const feedback2 = password2.nextElementSibling; // Feedback pour password2
+
+            const isLengthValid = password1.value.length >= 8;
+            const isMatch = password1.value === password2.value;
+
+            // Vérifie la longueur du mot de passe
+            if (!isLengthValid) {
+                feedback1.classList.remove('text-success');
+                feedback1.classList.add('text-danger');
+                feedback1.textContent = 'Le mot de passe doit comporter au moins 8 caractères.';
+                feedback2.textContent = ''; // On efface le feedback du deuxième champ
+                return;
+            } else {
+                feedback1.textContent = ''; // On efface le feedback du premier champ si la longueur est bonne
+            }
+
+            // Vérifie la correspondance des mots de passe uniquement si la longueur est correcte
+            if (isLengthValid && !isMatch) {
+                feedback2.classList.remove('text-success');
+                feedback2.classList.add('text-danger');
+                feedback2.textContent = 'Les mots de passe ne correspondent pas.';
+            } else if (isLengthValid && isMatch) {
+                feedback1.classList.remove('text-danger');
+                feedback1.classList.add('text-success');
+                feedback1.textContent = 'Mot de passe valide.';
+
+                feedback2.classList.remove('text-danger');
+                feedback2.classList.add('text-success');
+                feedback2.textContent = 'Les mots de passe correspondent.';
             }
         }
     </script>
