@@ -89,7 +89,7 @@ puis :
 
 puis
 
-	python3 manage.py runserver
+	py manage.py runserver
 
   #### H - démarrez l'application Web LITReview dans votre navigateur web en inscrivant l'adresse :
 
