@@ -13,6 +13,7 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = ["time_created"]
     search_fields = ["title"]
 
+
 class ReviewAdmin(admin.ModelAdmin):
     form = ReviewForm
     fieldsets = [
@@ -23,13 +24,14 @@ class ReviewAdmin(admin.ModelAdmin):
     list_display = ["headline", "rating", "user", "time_created", "body", "ticket"]
     list_filter = ["time_created"]
     search_fields = ["headline"]
-    
-    # Surcharger la méthode formfield_for_dbfield pour utiliser 
+
+    # Surcharger la méthode formfield_for_dbfield pour utiliser
     # l'élégant widget de formulaire en étoiles pour l'administration
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == 'rating':
             kwargs['widget'] = StarRatingWidget()
         return super().formfield_for_dbfield(db_field, request, **kwargs)
+
 
 class UserFollowsAdmin(admin.ModelAdmin):
     fieldsets = [
@@ -38,12 +40,14 @@ class UserFollowsAdmin(admin.ModelAdmin):
     ]
     list_display = ["user", "followed_user"]
 
+
 class UserBlockAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Utilisateur", {"fields": ["user"]}),
         ("Utilisateurs bloqués", {"fields": ["blocked_user"]}),
     ]
     list_display = ["user", "blocked_user"]
+
 
 admin.site.register(Ticket, TicketAdmin)
 admin.site.register(Review, ReviewAdmin)

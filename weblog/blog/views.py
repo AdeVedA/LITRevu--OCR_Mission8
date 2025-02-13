@@ -1,5 +1,5 @@
 from django.views import View
-from django.urls import reverse, reverse_lazy # reverse_lazy redirige vers une URL une fois une action terminée
+from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
@@ -12,8 +12,10 @@ from .models import Ticket, Review, UserFollows, UserBlock
 
 User = get_user_model()
 
-# vue gérant le flux d'actualité (billets/critiques de l'utilisateur connecté et des utilisateurs suivis)
+
 class FluxView(LoginRequiredMixin, View):
+    """vue gérant le flux d'actualité (billets/critiques de l'utilisateur connecté et des utilisateurs suivis)
+    """
 
     def get(self, request):
         # Récupérer l'utilisateur connecté (pas de requête en base, user est déjà dans l'objet request)
@@ -22,7 +24,7 @@ class FluxView(LoginRequiredMixin, View):
         # Récupérer les utilisateurs que cet utilisateur suit (en liste d'ID, plus efficiente, plutôt qu'objets)
         followed_users = UserFollows.objects.filter(user=user).values_list('followed_user', flat=True)
 
-        # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit, 
+        # Récupérer les tickets créés par l'utilisateur ou par ceux qu'il suit,
         # & précharger (/combiner en mémoire) les critiques liées par la ForeignKey 'ticket' aux tickets
         tickets = Ticket.objects.filter(
             user__in=[user] + list(followed_users)).prefetch_related('review_set')
@@ -60,24 +62,26 @@ class FluxView(LoginRequiredMixin, View):
         # Rendre le template 'flux.html' avec le contexte
         return render(request, 'blog/flux.html', context)
 
-# Vue gérant l'affichage de tous les posts (billets, critiques...) de l'utilisateur connecté
+
 class PostsView(LoginRequiredMixin, TemplateView):
-    # Cette vue nécessite que l'utilisateur soit connecté (LoginRequiredMixin)
+    """ Vue gérant l'affichage de tous les posts (billets, critiques...) de l'utilisateur connecté
+    Cette vue nécessite que l'utilisateur soit connecté (LoginRequiredMixin)
+    """
     template_name = 'blog/mesposts.html'
-    
+
     def get(self, request):
         # Récupérer l'utilisateur connecté
         user = request.user
 
         # Récupérer les tickets créés par l'utilisateur
         tickets = Ticket.objects.filter(user=user)
-        for ticket in tickets: 
+        for ticket in tickets:
             # Ajouter un attribut type pour les identifier dans le html
             ticket.type = 'ticket'
 
         # Récupérer les critiques créées par l'utilisateur
         reviews = Review.objects.filter(user=user)
-        for review in reviews: 
+        for review in reviews:
             # Ajouter attribut d'identification
             review.type = 'review'
             review.star_rating = '★' * review.rating + '☆' * (5 - review.rating)
@@ -90,11 +94,13 @@ class PostsView(LoginRequiredMixin, TemplateView):
             'mesposts_items': mesposts_items,
             # Liste des posts de l'utilisateur
         }
-        return render(request,'blog/mesposts.html', context)
+        return render(request, 'blog/mesposts.html', context)
 
-# Vue pour la gestion du following de l'utilisateur connecté 
-# (s'abonner, se désabonner, bloquer, débloquer, et monitorer nos suivis et suiveurs)
+
 class SubscriptionView(LoginRequiredMixin, TemplateView):
+    """Vue pour la gestion du following de l'utilisateur connecté
+    (s'abonner, se désabonner, bloquer, débloquer, et monitorer nos suivis et suiveurs)
+    """
     template_name = 'blog/mesabonnements.html'
 
     def get_context_data(self, **kwargs):
@@ -146,14 +152,13 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
                 UserFollows.objects.filter(user=request.user, followed_user=user_to_unfollow).delete()
                 messages.success(request, f"Vous avez arrêté de suivre {user_to_unfollow.username}.")
             except User.DoesNotExist:
-                messages.error(request, f"Utilisateur non trouvé.")
+                messages.error(request, f"Utilisateur {user_id} non trouvé.")
 
         # pour bloquer un utilisateur qui nous suit
         elif 'block' in request.POST:
             user_id = request.POST.get('block_user_id')
             try:
                 user_to_block = get_object_or_404(User, id=user_id)
-            
                 # Supprimer l'abonnement (le suivi)
                 UserFollows.objects.filter(user=user_to_block, followed_user=request.user).delete()
                 # Créer une relation de blocage
@@ -161,32 +166,33 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
                 # Message notifiant le blocage
                 messages.success(request, f"Vous avez bloqué {user_to_block.username}.")
             except User.DoesNotExist:
-                messages.error(request, f"Utilisateur non trouvé.")
+                messages.error(request, f"Utilisateur {user_id} non trouvé.")
 
         elif 'unblock' in request.POST:
             # Déblocage d'un utilisateur
             user_id = request.POST.get('unblock_user_id')
             try:
                 user_to_unblock = get_object_or_404(User, id=user_id)
-                
                 # Supprimer la relation de blocage
                 UserBlock.objects.filter(user=request.user, blocked_user=user_to_unblock).delete()
                 messages.success(request, f"Vous avez débloqué {user_to_unblock.username}.")
             except User.DoesNotExist:
-                messages.error(request, f"Utilisateur non trouvé.")
+                messages.error(request, f"Utilisateur {user_id} non trouvé.")
 
         return redirect(reverse('blog:mesabonnements'))
 
-# Vue pour la création ou la modification d'un billet
+
 class TicketView(LoginRequiredMixin, CreateView, UpdateView):
+    """Vue pour la création ou la modification d'un billet
+    """
     model = Ticket
     form_class = TicketForm
     template_name = 'blog/modifier_billet.html'
-    success_url = reverse_lazy('blog:mesposts') # Redirection vers le flux après modification ou création
+    success_url = reverse_lazy('blog:mesposts')  # Redirection vers le flux après modification ou création
 
     # Méthode pour afficher le formulaire avec (modif) ou sans (création) contenu
     def get_object(self):
-        # Récupérer le ticket s'il y a un `ticket_id` dans les kwargs 
+        # Récupérer le ticket s'il y a un `ticket_id` dans les kwargs
         # et si l'utilisateur connecté en est l'auteur, sinon renvoyer None
         ticket_id = self.kwargs.get('ticket_id')
         if ticket_id:
@@ -205,11 +211,12 @@ class TicketView(LoginRequiredMixin, CreateView, UpdateView):
         context = super().get_context_data(**kwargs)
         ticket_id = self.kwargs.get('ticket_id')
         if ticket_id:
-            context['is_editing'] = True # Pour différencier création / modification dans le template
+            context['is_editing'] = True  # Pour différencier création / modification dans le template
         return context
 
-# Vue pour la création d'une critique en réponse à un billet
+
 class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
+    # Vue pour la création d'une critique en réponse à un billet
     model = Review
     form_class = ReviewForm
     template_name = 'blog/creer_critique.html'
@@ -255,8 +262,10 @@ class ReviewView(LoginRequiredMixin, CreateView, UpdateView):
             return reverse('blog:flux')  # Redirige vers le flux après l'envoi de la critique
         return reverse('blog:mesposts')  # Redirige vers le mesposts après la modification de la critique
 
-# Vue pour la suppression d'un billet ou d'une critique
+
 class PostDeleteView(LoginRequiredMixin, View):
+    """Vue pour la suppression d'un billet ou d'une critique
+    """
 
     def get_object(self, post_type, post_id):
         # Récupérer dynamiquement l'objet selon le type
@@ -273,7 +282,7 @@ class PostDeleteView(LoginRequiredMixin, View):
     def post(self, request, post_type, post_id):
         # Récupérer l'objet à supprimer
         post = self.get_object(post_type, post_id)
-        
+
         # Si l'utilisateur n'est pas le propriétaire du post, on le redirige sans supprimer
         if post.user != request.user:
             return redirect('blog:mesposts')
@@ -284,8 +293,10 @@ class PostDeleteView(LoginRequiredMixin, View):
         # Rediriger après suppression
         return redirect('blog:mesposts')
 
-# Vue pour la création conjointe d'une critique et d'un billet
+
 class BilletReviewView(LoginRequiredMixin, TemplateView):
+    """Vue pour la création conjointe d'une critique et d'un billet
+    """
     template_name = 'blog/creer_billet-critique.html'
     success_url = reverse_lazy('blog:flux')
 

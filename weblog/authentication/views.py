@@ -3,23 +3,25 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate, logout, get_user_model
-
 from .forms import SignUpForm
 
 
 User = get_user_model()
 
-# dans authentication/views.py :
 
 class CustomLoginView(LoginView):
+    """gestion de la connexion"""
     template_name = 'authentication/login.html'
+
     def get(self, request):
         return render(request, 'authentication/login.html')
+
     def get_success_url(self):
         return '/flux/'  # Redirige l'utilisateur authentifié vers la page d'accueil
 
-# gestion de l'inscription des utilisateurs
+
 class SignUpView(FormView):
+    """gestion de l'inscription des utilisateurs"""
     template_name = 'authentication/signup.html'
     form_class = SignUpForm
     success_url = '/flux/'  # Rediriger vers la page d'accueil après l'inscription
@@ -37,8 +39,9 @@ class SignUpView(FormView):
         # Continue le flux normal en appelant la méthode form_valid() de la classe parente
         return super().form_valid(form)
 
-# déconnexion des utilisateurs
+
 class CustomLogoutView(View):
+    """gestion de la déconnexion des utilisateurs"""
     # Méthode qui s'exécute lorsqu'une requête GET est envoyée à cette vue
     def get(self, request):
         # Déconnecte l'utilisateur actuel

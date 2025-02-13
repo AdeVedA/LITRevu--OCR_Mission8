@@ -6,8 +6,8 @@ from django.utils import timezone
 from django.contrib import admin
 
 
-# Modèle pour le suivi d'utilisateurs
 class UserFollows(models.Model):
+    """Modèle pour le suivi d'utilisateurs"""
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')  # Utilisateur qui suit
     followed_user = models.ForeignKey(
@@ -23,9 +23,9 @@ class UserFollows(models.Model):
     def __str__(self):
         return f'{self.user} suit {self.followed_user}'
 
-# Modèle pour le blocage d'utilisateurs
-class UserBlock(models.Model):
 
+class UserBlock(models.Model):
+    """Modèle pour le blocage d'utilisateurs"""
     user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blocking')  # Utilisateur qui bloque
     blocked_user = models.ForeignKey(
@@ -41,41 +41,40 @@ class UserBlock(models.Model):
     def __str__(self):
         return f'{self.user} a bloqué {self.blocked_user}'
 
-# Modèle Ticket pour une demande de critique (billet)
-class Ticket(models.Model):
 
+class Ticket(models.Model):
+    """Modèle Ticket pour une demande de critique (billet)"""
     title = models.CharField(
         max_length=128, verbose_name="Titre")  # Titre du livre ou article
     description = models.TextField(
         max_length=1024, verbose_name="Description", blank=True)  # Description du billet
     time_created = models.DateTimeField(
-        auto_now_add=True, verbose_name="Date de création") # Date de création/publication
+        auto_now_add=True, verbose_name="Date de création")  # Date de création/publication
     user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE) # L'utilisateur qui a créé le billet
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # L'utilisateur qui a créé le billet
     image = models.ImageField(
-        null=True, blank=True, verbose_name="image du billet", default='no_image.png') # image du billet
+        null=True, blank=True, verbose_name="image du billet", default='no_image.png')  # image du billet
 
     IMAGE_MAX_FILE_SIZE = 2 * 1024 * 1024  # Limite de taille : 2 MB
-    
+
     @admin.display(
         boolean=True,
         ordering="time_created",
         description="published recently?"
     )
-
     def was_published_recently(self):
         now = timezone.now()
         return now - datetime.timedelta(days=3) <= self.time_created <= now
-    
+
     def has_a_review(self):
         return self.review_set.exists()
-    
+
     @staticmethod
     def valid_image_size(image):
         if image.size > Ticket.IMAGE_MAX_FILE_SIZE:
             return False, "La taille de l'image dépasse la limite autorisée de 2 MB."
         return True, None
-    
+
     class Meta:
         verbose_name = 'Billet'
         verbose_name_plural = 'Tous les billets'
@@ -84,9 +83,9 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.title} créé par {self.user}"
 
-# Modèle Review pour une critique de livre/article
-class Review(models.Model):
 
+class Review(models.Model):
+    """Modèle Review pour une critique de livre/article"""
     ticket = models.ForeignKey(to=Ticket, on_delete=models.CASCADE)
     rating = models.PositiveSmallIntegerField(
         # valide que l'évaluation soit bien entre 0 et 5

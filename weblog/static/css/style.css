@@ -1,6 +1,5 @@
 body {
     font-family: "Literata", serif;
-    font-optical-sizing: auto;
     font-weight: 400;
     font-style: italic;
     position: relative;
@@ -16,35 +15,30 @@ body {
 
 .literata-700 {
     font-family: "Literata", serif;
-    font-optical-sizing: auto;
     font-weight: 700;
     font-style: italic;
 }
 
 .literata-600 {
     font-family: "Literata", serif;
-    font-optical-sizing: auto;
     font-weight: 600;
     font-style: italic;
 }
 
 .literata-500 {
     font-family: "Literata", serif;
-    font-optical-sizing: auto;
     font-weight: 500;
     font-style: italic;
 }
 
 .literata-400 {
     font-family: "Literata", serif;
-    font-optical-sizing: auto;
     font-weight: 400;
     font-style: italic;
 }
 
 .literata-300 {
     font-family: "Literata", serif;
-    font-optical-sizing: auto;
     font-weight: 300;
     font-style: italic;
 }

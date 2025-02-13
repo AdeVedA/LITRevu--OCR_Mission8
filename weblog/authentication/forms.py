@@ -6,6 +6,7 @@ from .models import CustomUser
 
 
 class SignUpForm(UserCreationForm):
+    """formulaire d'inscription"""
     email = forms.EmailField(
         max_length=254,
         required=True,
@@ -21,7 +22,7 @@ class SignUpForm(UserCreationForm):
         # Supprimer les messages d'aide par défaut
         for fieldname in ['username', 'password1', 'password2']:
             self.fields[fieldname].help_text = None
-        
+
         # Définir les labels personnalisés
         self.fields['username'].label = 'Votre Nom d\'utilisateur'
         self.fields['email'].label = 'Votre adresse e-mail'
@@ -55,8 +56,8 @@ class SignUpForm(UserCreationForm):
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
-        
+
         if password1 and password2 and password1 != password2:
             raise ValidationError("Les mots de passe ne correspondent pas.")
-        
+
         return password2
